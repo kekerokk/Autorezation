@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Authorization;
 
 namespace Авторизация
 {
@@ -12,11 +13,19 @@ namespace Авторизация
         private static Accounts instance;
 
         static List<accounts> AccountsDB = new List<accounts>();
+        private AccountsDataBaseEntities db;
 
         public void AddAccount(string login, string password)
         {
+            db = new AccountsDataBaseEntities();
             accounts acc = new accounts(login, password);
             AccountsDB.Add(acc);
+            Table account = new Table();
+            account.password = password;
+            account.login = login;
+            
+            db.Table.Add(account);
+            db.SaveChanges();
         }
         public List<accounts> GetAccounts()
         {
